@@ -1,10 +1,11 @@
 handleMenuClick = event => {
+  /*check if click was on mobile nav panel*/
   if (event.target.id === "mobile") {
     const navPanel = document.querySelector("nav");
     console.log("on mobile");
     navPanel.classList.toggle("open");
     console.log("after mobile", navPanel.classList);
-  } else {
+  } else { /*check if click was on desktop panel*/
     const navPanel = document.querySelector("nav");
     console.log(navPanel.classList);
     navPanel.classList.remove("open");
@@ -23,12 +24,12 @@ handleMenuClick = event => {
     content.insertAdjacentHTML("afterBegin", page[namePage]);
   }
 };
-
+/*add listneres to navs panel(mobile and desktop)*/
 const navs = document.getElementsByTagName("nav");
 for(let i = 0; i < navs.length; i++){
     navs[i].addEventListener('click', handleMenuClick)
 }
-
+/* add content if load first time*/
 const main = document.querySelector('main');
 if(main.innerHTML === ""){
     main.insertAdjacentHTML("afterBegin", pages[0].about)
