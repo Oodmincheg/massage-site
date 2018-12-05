@@ -1,34 +1,40 @@
-handleMenuClick = event => {
+"use strict";
+const handleMenuClick = event => {
   /*check if click was on mobile nav panel*/
   if (event.target.id === "mobile") {
     const navPanel = document.querySelector("nav");
     navPanel.classList.toggle("open");
-  } else {
-    /*check if click was on desktop panel*/
+  } else if (event.target.tagName === "LI") {
+    /*check if click was on li element*/
     const navPanel = document.querySelector("nav");
     navPanel.classList.remove("open");
-    let activeNav = document.getElementsByClassName("active")[0];
-    activeNav.className = "inactive";
-    event.target.className = "active";
+    const activeNav = document.getElementsByClassName("active")[0];
+    activeNav.classList.add("inactive");
+    activeNav.classList.remove("active");
+    event.target.classList.add("active");
     const namePage = event.target.id;
-    const page = pages.find(el => {
-      return el[namePage];
-    });
-
     const content = document.querySelector("main");
-    if (content.firstChild) {
-      content.removeChild(content.firstChild);
+    const visibleNow = content.querySelector("div:not(.hidden)");
+    const clicked = content.getElementsByClassName(namePage)[0];
+    if (visibleNow !== clicked) {
+      visibleNow.classList.toggle("hidden");
+      clicked.classList.toggle("hidden");
     }
-    content.insertAdjacentHTML("afterBegin", page[namePage]);
   }
 };
 /*add listneres to navs panel(mobile and desktop)*/
 const navs = document.getElementsByTagName("nav");
-for (let i = 0; i < navs.length; i++) {
-  navs[i].addEventListener("click", handleMenuClick);
-}
-/* add content if load first time*/
+[...navs].forEach(nav => {
+  nav.addEventListener("click", handleMenuClick);
+});
+/* add all content 'about' page is visible one */
 const main = document.querySelector("main");
-if (main.innerHTML === "") {
-  main.insertAdjacentHTML("afterBegin", pages[0].about);
-}
+pages.forEach(page => {
+  main.insertAdjacentHTML("afterBegin", page.content);
+  if (page.title === "about") {
+    const navAbout = document.getElementById("about");
+    navAbout.classList.add("active");
+  } else {
+    main.firstChild.classList.add(page.title, "hidden");
+  }
+});
